@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+    <div class="text-center">
+        <div>
+            <h3>Capstone: A text based adventure.</h3>
+        </div>
+    </div>
+
+        <br>
+        <div class="title">
+            
+            <p>
+                Welcome to the land of Capstone. Where adventure awaits. Explore the expansive world, and fend off monsters of all shapes and sizes as you search for gold and glory. Everyone is their own
+                person. Make a character suited to your liking and go explore. Find hidden treasures, fight dragons of mythical proportions, and loot amazing gear to stand higher than any other. Each story is differnt
+                and every ending thier own. Will you tell a tale of grandur and fame? or will you be forgotten among the rest? Only you will find what story you tell in the fantasy land of Capstone.
+            </p>
+        </div>
+        <br>
+        <div class="nav-side">
+            <!--<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>-->
+
+            <button class="btn">@Html.ActionLink("Register","Register", "Home")</button>
+            <button class="btn">@Html.ActionLink("Login", "Login", "Home")</button>
+            <br>
+
+            <!--Dropdown menu-->
+            <div class="dropdown">
+                <button onclick="dropDown()" class="dropBtn">More</button>
+                <div id="myDropdown" class="dropdown-item">
+                    <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+                </div>
+            </div>
+        </div>

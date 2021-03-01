@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Test";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="nav-side">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a href="#">About</a>
+            <a href="#">FAQs</a>
+            <a href="#">Wiki</a>
+        </div>
+    </div>
+</div>
+<br>
+
+<button class="btn-user" type="submit">@Html.ActionLink("Logout", "Logout", "Home")</button>
+
+

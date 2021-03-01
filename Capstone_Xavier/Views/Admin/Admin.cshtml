@@ -1,0 +1,113 @@
+﻿@using Capstone_Xavier.Models
+@model AdminModel
+
+@{
+    ViewBag.Title = "Admin";
+
+}
+
+<h2>Admin</h2>
+
+
+
+<div class="nav-side">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a onclick="location.href='@Url.Action("Users", "Home")'">Home</a>
+            <a onclick="location.href='@Url.Action("UserInfo", "User")'">Profile</a>
+            <a onclick="location.href='@Url.Action("Logout", "Home")'">Logout</a>
+            <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+        </div>
+    </div>
+</div>
+
+
+<label style="left: 28vw; top: 27vw; position: absolute">Click the quil to edit users or monsters.</label>
+<div class="list" id="Users" style="display: inline-block; width:50%; overflow-x: visible; ">
+    <label style="top: -5vw;">Users List</label>
+    @foreach (UserModel user in Model.users)
+    {
+
+        <div class="list-item-character">
+
+            <div>
+                <p style="float: left;">@user.username</p>
+                <div class="info" style="border: none; width: 9vw; display: inline-block; color: black; float: left;">
+                    Role: @if (user.roleID == 0)
+                    {
+                        <text>User</text>
+                    }
+                    else if (user.roleID == 1)
+                    {
+                        <text>Administrator</text>
+                    }
+                    else
+                    {
+                        <text>GameMaster</text>
+                    }
+                    <br>
+                </div>
+
+            </div>
+                <button class="btn-change" style="float: left; margin: 3px;" value="@user.userID" onclick="location.href='@Url.Action("ReturnUserInfo", "Admin",  user)'"></button>
+                
+            </div>
+        <hr>
+
+    }
+</div>
+
+<div class="list" id="Monsters" style="display: inline-block; width:50%; overflow-x: visible; display: none">
+    <label style="top: -5vw;">Monsters List</label>
+    @foreach (MonsterModel monster in Model.monsters)
+    {
+
+        <div class="list-item-character" style="width: auto; ">
+            <div style="width: auto">
+                <p style=" display:inline; ">@monster.monsterName</p>
+                <div class="info" style="border: none; width: 80% ; display: inline; color: black; right: -5vw ">
+                    Health: @monster.health | Armor: @monster.armor | Damage: @monster.damage | Danger: @monster.danger
+                    <br>
+                </div>
+                <button class="btn-change" style="float: left; margin: 3px;" value="@monster.monsterID" onclick="location.href='@Url.Action("MonsterAlter", "Admin", monster)'"></button>
+
+            </div>
+
+        </div>
+        <hr>
+    }
+</div>
+<div id="ComabatBtn" class="" style="display: inline-block; float: right; right: 10vw; top: 23vw; position: absolute;">
+    
+    <button class="btn-user" id="MButton" style="display:none;"  onclick="location.href='@Url.Action("CreateMonster", "Admin")'">Create Monster</button>
+    <button class="btn-user" id="Toggle" onclick="Toggle()">See Monsters</button>
+</div>
+
+
+
+
+
+<script>
+    function Toggle() {
+        var monsters = document.getElementById("Monsters");
+        var users = document.getElementById("Users");
+        var button = document.getElementById("MButton");
+        var tButton = document.getElementById("Toggle");
+
+        if (users.style.display === "inline-block") {
+            monsters.style.display = "inline-block";
+            users.style.display = "none";
+            button.style.display = "inline-block";
+            tButton.innerHTML = "See Users";
+
+        } else {
+            monsters.style.display = "none";
+            users.style.display = "inline-block";
+            button.style.display = "none";
+            tButton.innerHTML = "See Monsters";
+        }
+    }
+
+    
+</script>

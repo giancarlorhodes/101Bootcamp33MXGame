@@ -1,0 +1,188 @@
+﻿@using Capstone_Xavier.Models
+@model MonsterModel
+@{
+    ViewBag.Title = "MonsterAlter";
+}
+
+<h3>MonsterAlter</h3>
+
+<div class="nav-side" style="margin: 2vw;">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a href="#">About</a>
+            <a onclick="location.href='@Url.Action("Users", "Home")'">Home</a>
+            @{
+                string role = Session["Role"].ToString();
+
+                if (role == "1" || role == "2")
+                {
+                    <a onclick="location.href='@Url.Action("Admin", "Admin")'">Admin</a>
+                }
+                else if (role == "3")
+                {
+                    <a onclick="location.href='@Url.Action("GameMaster", "Admin")'">GameMaster</a>
+                }
+            }
+            <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+            <a onclick="location.href='@Url.Action("Logout", "Home")'">Logout</a>
+
+        </div>
+    </div>
+</div>
+<br>
+@if (Model.alertType == 1)
+{
+    <div class="alert alert-warning alert-dismissible fade show" style="height: 5vw; width:15vw; left: 35vw; position: absolute; ">
+        Monster Updated Successfully!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+    </div>
+}
+else if (Model.alertType == 2)
+{
+    <div class="alert alert-warning alert-dismissible fade show" style="height: 5vw; width:20vw; left: 35vw; position: absolute; ">
+        Monster failed to update. Please check your values. 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+    </div>
+}
+
+
+<div class="info-box" style="top: 12vw; height: 25vw;">
+    <label>Name</label>
+    <p class="c-info">@Model.monsterName</p>
+    <label>Health</label>
+    <p class="c-info">@Model.health</p>
+    <label>Armor</label>
+    <p class="c-info">@Model.armor</p>
+    <label>Base Damage</label>
+    <p class="c-info">@Model.damage</p>
+    <label>Danger Level</label>
+    <p class="c-info">@Model.danger</p>
+    <label>Behaviour</label>
+    @if (Model.behaviour == 0)
+    {
+        <p class="c-info">Passive</p>
+    }
+    else if (Model.behaviour == 1)
+    {
+        <p class="c-info">Neutral</p>
+    }
+    else
+    {
+        <p class="c-info">Agressive</p>
+    }
+</div>
+<div class="" style="display: inline-block; float: left; left: 13vw; top: 40vw; position: absolute;">
+    <button class="btn-user" id="MButton" onclick="Update()">Update Monster</button>
+    <button class="btn-user" id="Toggle" onclick="Delete()">Remove</button>
+</div>
+
+@using (Html.BeginForm("MonsterAlterPost", "Admin", Model))
+{
+
+
+    <div id="Update" class="nav-side" style="top: 5vw; display: none;">
+        <div class="input-list">
+
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Name</label>
+                @Html.EditorFor(MonsterModel => Model.monsterName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Health(Max 300)</label>
+                @Html.EditorFor(MonsterModel => Model.health, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Armor(Max 40)</label>
+                @Html.EditorFor(MonsterModel => Model.armor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Damage(Max 100)</label>
+                @Html.EditorFor(MonsterModel => Model.damage, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Danger(Max 10)</label>
+                @Html.EditorFor(MonsterModel => Model.danger, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+
+            <div class="input">
+                <span class="icon-input"></span>
+                <label>Monster Behaviour(Higher Num = More Agressive)</label>
+                @Html.DropDownListFor(MonsterModel => Model.behaviour, new SelectList(Model.monsterBehaviours), new { @id = "classID", @class = "form-control" })
+
+
+            </div>
+            <br>
+        </div>
+
+        <button type="submit" class="btn-user" onclick="">Submit</button>
+    </div>
+
+}
+
+
+
+
+<div class="warning" style=" bottom: 20vw; right: 15vw; display: none;" id="Warning">
+    <h3 style="position: absolute">Warning!</h3>
+    <p style="height:7vw">Are you sure you want to permanetly remove this Monster?</p>
+    <button class="btn-user" onclick="location.href='@Url.Action("RemoveMonster", "Admin",  Model)'">Confirm</button>
+    <button class="btn-user" onclick="Delete()">Cancel</button>
+</div>
+
+
+<script>
+    //For toggling the update user password
+    function Update() {
+        var update = document.getElementById("Update");
+        var warning = document.getElementById("Warning");
+
+        if (update.style.display == "none") {
+            update.style.display = "inline-block";
+            warning.style.display = "none";
+        } else {
+            update.style.display = "none";
+        }
+    }
+
+    //For toggling the remove confirm
+    function Delete() {
+        var warning = document.getElementById("Warning");
+        var update = document.getElementById("Update");
+        if (warning.style.display == "none") {
+            warning.style.display = "inline-block";
+            update.style.display = "none";
+        } else {
+            warning.style.display = "none";
+        }
+    }
+
+    //For toggling the update user role
+    function ChangeRole() {
+        var role = document.getElementById("Roles");
+
+        if (role.style.display === "none") {
+            role.style.display = "inline-block";
+        } else {
+            role.style.display = "none";
+        }
+
+
+    }
+
+</script>

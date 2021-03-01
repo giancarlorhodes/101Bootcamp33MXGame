@@ -1,0 +1,160 @@
+﻿@using Capstone_Xavier.Models
+@model UserModel
+@{
+    ViewBag.Title = "AdminUserAlter";
+}
+
+<h3>Alter User @Model.roleID</h3>
+
+<div class="nav-side" style="margin: 2vw;">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a href="#">About</a>
+            <a onclick="location.href='@Url.Action("Users", "Home")'">Home</a>
+            @{
+                string role = Session["Role"].ToString();
+
+                if (role == "1" || role == "2")
+                {
+                    <a onclick="location.href='@Url.Action("Admin", "Admin")'">Admin</a>
+                }
+            }
+            <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+            <a onclick="location.href='@Url.Action("Logout", "Home")'">Logout</a>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="info-box" style="top: 12vw; height: 15vw;">
+    <label>Name</label>
+    <p class="c-info">@Model.username</p>
+    <label>Email</label>
+    <p class="c-info">@Model.email</p>
+    <label>Role</label>
+    @if (Model.roleID == 0)
+    {
+        <p class="c-info">User</p>
+    }
+    else if (Model.roleID == 1)
+    {
+        <p class="c-info">Administrator</p>
+    }
+    else {
+        <p class="c-info">GameMaster</p>
+    }
+</div>
+<div class="" style="display: inline-block; float: left; left: 13vw; top: 28vw; position: absolute;">
+    <button class="btn-user" id="MButton" onclick="Update()">Update User</button>
+    <button class="btn-user" id="Toggle" onclick="Delete()">Remove</button>
+</div>
+
+@using (Html.BeginForm("UpdateUser", "Admin", Model))
+{
+<div id="Update" class="nav-side" style="top: 4vw; display: none;">
+    <div class="input-list">
+
+        <div class="input">
+            <label>Password</label>
+            <span class="icon-input"></span>
+
+            @Html.EditorFor(UserModel => UserModel.password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+        </div>
+        <br>
+        <div class="input">
+            <label>Confirm Password</label>
+            <span class="icon-input"></span>
+
+            @Html.EditorFor(UserModel => UserModel.confirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+        </div>
+        <br>
+        <div class="input">
+            <label>Email</label>
+            <span class="icon-input"></span>
+
+            @Html.EditorFor(UserModel => UserModel.email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+        </div>
+        <br>
+        <div class="input">
+            <label>Username</label>
+            <span class="icon-input"></span>
+
+            @Html.EditorFor(UserModel => UserModel.username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+        </div>
+        <br>
+            <div class="input">
+                <label>Confirm Password</label>
+                <span class="icon-input"></span>
+
+                @Html.DropDownListFor(Model => Model.roleID, new SelectList(Model.roles, "roleID", "roleName"), new { @id = "Roles", @class = "form-control" })
+                <span>Change Role?: </span> @Html.CheckBoxFor(UserModel => UserModel.changeRole, false)
+
+            </div>
+            <br>
+        
+
+    </div>
+
+    <button type="submit" class="btn-user" onclick="">Submit</button>
+</div>
+
+    }
+
+    
+
+
+<div class="warning" style=" bottom: 20vw; right: 15vw; display: none;" id="Warning">
+    <h3 style="position: absolute">Warning!</h3>
+    <p>Are you sure you want to permanetly remove this user?</p>
+    <button class="btn-user" onclick="location.href='@Url.Action("RemoveUser", "Admin",  Model)'" >Confirm</button>
+    <button class="btn-user" onclick="Delete()">Cancel</button>
+</div>
+
+
+<script>
+    //For toggling the update user password
+    function Update() {
+        var update = document.getElementById("Update");
+        var warning = document.getElementById("Warning");
+
+        if (update.style.display == "none") {
+            update.style.display = "inline-block";
+            warning.style.display = "none";
+        } else {
+            update.style.display = "none";
+        }
+    }
+
+    //For toggling the remove confirm
+    function Delete() {
+        var warning = document.getElementById("Warning");
+        var update = document.getElementById("Update");
+        if (warning.style.display == "none") {
+            warning.style.display = "inline-block";
+            update.style.display = "none";
+        } else {
+            warning.style.display = "none";
+        }
+    }
+
+    //For toggling the update user role
+    function ChangeRole() {
+        var role = document.getElementById("Roles");
+
+        if (role.style.display === "none") {
+            role.style.display = "inline-block";
+        } else {
+            role.style.display = "none";
+        }
+
+
+    }
+
+</script>
+
+

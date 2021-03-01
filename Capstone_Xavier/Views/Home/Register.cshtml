@@ -1,0 +1,87 @@
+﻿@model Capstone_Xavier.Models.RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<h2>@ViewData["Title"]</h2>
+<br>
+<div class="nav-side">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a href="#">About</a>
+            <a href="#">FAQs</a>
+            <a href="#">Wiki</a>
+            <a>@Html.ActionLink("Login", "Login", "Home")</a>
+            <a>@Html.ActionLink("Home", "Index", "Home")</a>
+            <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Register", "Home"))
+{
+    if (Model.alertType == 1)
+    {
+        <div class="alert alert-warning alert-dismissible fade show">
+            Invalid register. Please try again.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+        </div>
+    }
+    else if (Model.alertType == 2)
+    {
+        <div class="alert alert-warning alert-dismissible fade show">
+            Username already exist. Please choose another name.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+        </div>
+    }
+    else if (Model.alertType == 3)
+    {
+        <div class="alert alert-warning alert-dismissible fade show">
+            Password is invalid. Passwords must contain at least 1 of the following. Capital letter. Number. Special character, and be between 8-20 characters
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+        </div>
+    }
+
+    <div class="input-list">
+        <div class="input">
+            <label>Username</label>
+            <span class="icon-input"></span>
+            @Html.EditorFor(RegisterModel => RegisterModel.username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter First Name" } })
+            @if (Model.userValid == 1)
+            {
+                @Html.ValidationMessageFor(RegisterModel => RegisterModel.username, null, new { @class = "validation" })
+                <span class="icon-warning"></span>
+            }
+        </div>
+        <br>
+        <div class="input">
+            <label>Password</label>
+            <span class="icon-input"></span>
+            @Html.EditorFor(RegisterModel => RegisterModel.password, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Enter Password." } })
+            @if (Model.passValid == 1)
+            {
+                @Html.ValidationMessageFor(RegisterModel => RegisterModel.password, null, new { @class = "validation" })
+                <span class="icon-warning"></span>
+            }
+        </div>
+        <br>
+        <div class="input">
+            <label>Email</label>
+            <span class="icon-input"></span>
+            @Html.EditorFor(RegisterModel => RegisterModel.email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Email" } })
+            @if (Model.emailValid == 1)
+            {
+                @Html.ValidationMessageFor(RegisterModel => RegisterModel.email, null, new { @class = "validation" })
+                <span class="icon-warning"></span>
+            }
+
+        </div>
+    </div>
+
+
+    <button class="btn-user" type="submit">Submit</button>
+    <button class="btn-user" type="reset">Clear</button>
+
+
+}

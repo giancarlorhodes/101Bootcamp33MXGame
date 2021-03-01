@@ -1,0 +1,79 @@
+﻿@using Capstone_Xavier.Models
+
+@model UserModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="nav-side" style="margin: 2vw;">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item"
+            <a onclick="location.href='@Url.Action("Users", "Home")'">Home</a>
+            @{
+                string role = Session["Role"].ToString();
+
+                if (role == "1" || role == "2")
+                {
+                    <a onclick="location.href='@Url.Action("Admin", "Admin")'">Admin</a>
+                }
+            }
+            <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
+            <a onclick="location.href='@Url.Action("Logout", "Home")'">Logout</a>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="info-box" style="top: 4vw; height: 15vw;">
+    <label>Name</label>
+    <p class="c-info">@Model.username</p>
+    <label>Email</label>
+    <p class="c-info">@Model.email</p>
+    <label>Password</label>
+    <p class="c-info">@Model.password</p>
+</div>
+
+@using (Html.BeginForm("UserInfo", "User", Model))
+{
+    <div class="nav-side" style="bottom: 2vw;">
+        <div class="input-list">
+            <div class="input">
+                <label>Username</label>
+                <span class="icon-input"></span>
+                @Html.EditorFor(UserModel => UserModel.username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter new username" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <label>Password</label>
+                <span class="icon-input"></span>
+
+                @Html.EditorFor(UserModel => UserModel.password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <label>Confirm Password</label>
+                <span class="icon-input"></span>
+
+                @Html.EditorFor(UserModel => UserModel.confirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Password" } })
+
+            </div>
+            <br>
+            <div class="input">
+                <label>Email</label>
+                <span class="icon-input"></span>
+
+                @Html.EditorFor(UserModel => UserModel.email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter New Email" } })
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn-user" onclick="">Submit</button>
+    </div>
+
+}

@@ -1,0 +1,524 @@
+﻿@using Capstone_Xavier.Models
+@model GameModel
+
+<!--The game view. Where text responses are put-->
+<div class="text-UI" id="text-UI">
+
+</div>
+
+@using (Ajax.BeginForm("GetCharacterInventory", "User", Model.character,
+    new AjaxOptions { UpdateTargetId = "Bag-List", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
+{
+    <!--The character UI and stats-->
+    <div class="info-UI">
+        <div style="width: 38%; height: 100%;  display:inline-block">
+            <h6 style=" display: block; width: 100%; float: left; font-size: x-large; text-align: center">@Model.character.name</h6>
+            <button class="btn-user" style="width: 50%; margin-left: 1vw;" type="submit" onclick="OpenBag()">Bag</button>
+        </div>
+        <div class="container-bar" style="width: 60%;  float: right; vertical-align: middle;">
+
+            <progress id="Health" class="Health" value="0" max="200"></progress>
+            <progress id="Stamina" value="20" max="60"></progress>
+            <progress id="Magica" value="10" max="60"><text>Magica</text></progress>
+        </div>
+    </div>
+    <!--The character bag items. Refreshed every time the bag button is clicked.-->
+
+    <div id="Bag-List" class="list-bag" style="bottom: 0;height: 20vw; position: absolute; top:28vw; display: none;">
+
+    </div>
+}
+
+@*--------Monster UI------------------*@
+<div id="MonsterUI" class="info-UI" style="top: 7vw; display: none;">
+    <div style="width: 38%; height: 100%;  display:inline-block">
+        <h6 style=" display: block; width: 100%; float: left; font-size: x-large; text-align: center" id="monsterName">Monster name</h6>
+    </div>
+    <div class="container-bar" style="width: 60%;  float: right; vertical-align: middle;">
+        <progress id="MHealth" class="Health" value="0" max="200"></progress>
+    </div>
+</div>
+
+<!--Opened and used for a list of available regions to travel to.-->
+<div class="list-bag" id="list-regions" style="display: none">
+
+    @{
+        foreach (RegionModel region in Model.regions)
+        {
+            <div class="c-info" id="region" value="@region.regionID" style="cursor: pointer;" role="button" onclick="Travel(@region.regionID, 1)">@region.regionName</div>
+        }
+    }
+
+</div>
+
+<!--The default buttons. Showed automatically-->
+<div id="defaultBtn" class="btn-block">
+    <button class="btn-user" id="Travel">Travel</button>
+    <button class="btn-user" id="Look" onclick="Travel(0,2)">Look Around</button>
+    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">Exit</button>
+</div>
+
+<!--Merchant Buttons. Called on merchant events-->
+<div id="MerchantBtns" class="btn-block" style="display: none;">
+    <button class="btn-user" id="Buy" style="display: none;" onclick="closeSellBag()">Buy</button>
+    <button class="btn-user" id="Sell" onclick="openSellBag()" >Sell</button>
+    <button class="btn-user" id="btn-merchant"  onclick="LeaveMerchant()">Leave Merchant</button>
+</div>
+  
+
+<!--For combat events only. Shows during monster events-->
+<div id="ComabatBtn" class="btn-block" style="display: none;">
+    <button class="btn-user" id="Travel" onclick="combatAction(0)">Attack</button>
+    <button class="btn-user" onclick="combatAction(1)">Defend</button>
+    <button class="btn-user" onclick="combatAction(2)">Flee</button>
+    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">Exit</button>
+</div>
+
+<!--For player death events. Shows only when the healt is less or = to 0-->
+<div id="Lost" class="btn-block" style="display: none;">
+    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">I accept my fate</button>
+</div>
+
+<!--For merchant events only. Refreshed every time the event is triggered-->
+<div id="merchant" class="info-box" style="left:55vw; height: 15vw; width:45vw; top: 7vw; display: none;" >
+    
+</div>
+
+
+
+
+<script type="text/javascript">
+    //For showing the available regions to travel to
+    $(document).ready(function () {
+
+        $('#Travel').click(function () {
+
+            var x = document.getElementById("list-regions");
+            if (x.style.display === "none") {
+                x.style.display = "inline-block";
+            } else {
+                x.style.display = "none";
+            }
+
+        });
+    });
+
+    //called on load. used to load character data.
+    document.addEventListener("DOMContentLoaded", function () {
+        var health = @Html.Raw(Json.Encode(Model.character.health));
+        var maxHP = @Html.Raw(Json.Encode(Model.character.maxHP));
+        var magica = @Html.Raw(Json.Encode(Model.character.magica));
+        var stamina = @Html.Raw(Json.Encode(Model.character.stamina));
+        var name = @Html.Raw(Json.Encode(Model.character.name));
+        var ob = {
+            hp: health,
+            maxhp: maxHP,
+            Stamina: stamina,
+            Magica: magica
+        }
+        //used for setting the health bar
+        var h = document.getElementById("Health");
+        h.max = ob.maxhp;
+        h.value = ob.hp;
+
+        //used for setting the stamina bar
+        var s = document.getElementById("Stamina");
+        s.value = ob.Stamina;
+        s.max = ob.Stamina;
+
+        //used for setting the magica bar
+        var m = document.getElementById("Magica");
+        m.max = ob.Magica;
+        m.value = ob.Magica;
+    });
+    //########################/*Misc and UI*/#######################################
+
+    //For decreasing specific bar values based on amount and bar
+    function alterBar(increment, element) {
+        var h = document.getElementById(element);
+        var min = h.value - increment;
+        var i;
+        var id = setInterval(animateBar, 80);
+        function animateBar() {
+            if (h.value === min || h.value === 0) {
+                clearInterval(id);
+            } else {
+                h.value--;
+            }
+        };
+    };
+
+    //For increasing specific bar values based on amount and bar
+    function increaseAlterBar(increment, element) {
+        var h = document.getElementById(element);
+        var min = h.value + increment;
+        var i;
+        var id = setInterval(animateBar, 90);
+        function animateBar() {
+            if (h.value === min || h.value === h.max) {
+                clearInterval(id);
+            } else {
+                h.value++;
+            }
+        };
+    };
+
+    //############################/*Events*/############################################
+
+    //used for calling c# method on monster and thief events
+     function eventAction(regionID, eventID) {
+
+        $.ajax({
+            url: "../../Game/EventAction",
+            type: "POST",
+            data: { regionID: regionID, eventID: eventID },
+            cache: false,
+            async: true,
+            success: function (data) {
+                 var element = document.getElementById("text-UI")
+                        element.innerHTML = element.innerHTML.concat(data)
+            }
+        });
+        };
+
+    //For calling monsters and starting combat.
+    function monsterEvent() {
+        var list = document.getElementById("list-regions");
+        list.style.display = "none";
+
+        var monsterUI = document.getElementById("MonsterUI");
+        monsterUI.style.display = "inline-block";
+
+        var combatBtn = document.getElementById("ComabatBtn");
+        combatBtn.style.display = "inline-block";
+
+        var defaultBtn = document.getElementById("defaultBtn");
+        defaultBtn.style.display = "none";
+
+        $.getJSON("../../Game/GetMonsterValues", function (response) {
+            var mName = document.getElementById("monsterName");
+            mName.innerHTML = response.monstername;
+
+            var mHealth = document.getElementById("MHealth");
+            mHealth.max = response.monsterHealth;
+            mHealth.value = response.monsterHealth;
+
+        })
+    };
+
+    function MerchantEvent() {
+        //$.getJSON("../../Game/MerchantEvent", function (response) {
+           var gold = @Html.Raw(Json.Encode(Model.character.gold));
+        //})
+         $.ajax({
+            url: "../../Game/MerchantEvent",
+            type: "POST",
+            data: {  },
+            cache: false,
+            async: true,
+            success: function (data) {
+                var merchantBox = document.getElementById("merchant");
+                merchantBox.style.display = "inline-block";
+                merchantBox.innerHTML = data;
+
+                var merchant = document.getElementById("MerchantBtns");
+                merchant.style.display = "inline-block";
+
+                var defaultBtn = document.getElementById("defaultBtn");
+                defaultBtn.style.display = "none";
+
+                var elem = document.getElementById("text-UI");
+                elem.innerHTML = elem.innerHTML.concat("<br><div style=' width: 10 %; height: auto; display: block; float: left; margin: 3px; padding: 3px; '>After searching the area for a while you come across an old man carrying a large sack on his back. He looks to you with a crookedd smile."+
+                            "Care to browse my wares? Opening the sack you see a few items. Will you buy? Your purse: <strong>"+gold+" gold</strong></div><br>");
+            }
+        });
+    }
+
+    //###############################/*Combat Actions*/########################
+    function combatAction(actionID) {
+        var mHealth = document.getElementById("MHealth").value;
+        var health = document.getElementById("Health").value;
+        var magica = document.getElementById("Magica").value;
+        var stamina = document.getElementById("Stamina").value;
+
+        //For altering the bars and calling possible death events
+        $.getJSON("../../Combat/CombatAction", { monsterHealth: mHealth, playerHealth: health, magica: magica, stamina: stamina, actionID: actionID }, function (response) {
+        
+            if (response.action === 0) {//Monster or player flee events
+
+                var story = document.getElementById("text-UI");
+                story.innerHTML = story.innerHTML.concat(response.print);
+
+                //Change the ui back to travel form
+                var monsterUI = document.getElementById("MonsterUI");
+                monsterUI.style.display = "none";
+
+                var combatBtn = document.getElementById("ComabatBtn");
+                combatBtn.style.display = "none";
+
+                var defaultBtn = document.getElementById("defaultBtn");
+                defaultBtn.style.display = "inline-block";
+                //Call monster flee event
+            } else {
+                //TODO-make seperate method
+                var story = document.getElementById("text-UI");
+                story.innerHTML = story.innerHTML.concat(response.print);
+
+                //used for altering the player bar
+                var playerHBar = document.getElementById("Health");
+                var playerStamina = document.getElementById("Stamina");
+                var playerMagica = document.getElementById("Magica");
+
+
+                var playerHealth = playerHBar.value;
+                var increment = playerHealth - response.playerH;
+                if (response.Stamina != null) {
+                    var staminaIncrement = stamina - response.Stamina;
+                    alterBar(staminaIncrement, playerStamina.id);
+                }
+                if (response.Magica != null) {
+                    var magicaIncrememnt = magica - response.Magica;
+                    alterBar(magicaIncrememnt, playerMagica.id);
+                    
+                }
+                alterBar(increment, playerHBar.id);
+                
+                //used for altering the mosnterbar
+                var monsterHBar = document.getElementById("MHealth");
+                var monsterIncrement = monsterHBar.value - response.monsterH;
+
+                if (increment < 0) {
+                    increment = (increment - increment) - increment;
+                }
+
+                if (monsterIncrement < 0) {
+                    monsterIncrement = (monsterIncrement - monsterIncrement) - monsterIncrement;
+                }
+
+                alterBar(monsterIncrement, monsterHBar.id);
+
+                if (monsterIncrement > monsterHBar.value) {
+
+                    monsterDeathEvent(playerHealth - increment);
+                }
+                if (increment > playerHBar.value) {
+                    playerDeathEvent();
+
+                }
+            }
+        })
+    };
+
+    function monsterDeathEvent(playerH) {
+        //var playerH = document.getElementById("Health");
+        $.ajax({
+            url: "../../Game/MonsterDeathEvent",
+            type: "POST",
+            data: { playerHealth: playerH },
+            cache: false,
+            async: true,
+            success: function (data) {
+                 var element = document.getElementById("text-UI")
+                element.innerHTML = element.innerHTML.concat(data)
+
+                //Change the ui back to travel form
+                var monsterUI = document.getElementById("MonsterUI");
+                monsterUI.style.display = "none";
+
+                var combatBtn = document.getElementById("ComabatBtn");
+                combatBtn.style.display = "none";
+
+                var defaultBtn = document.getElementById("defaultBtn");
+                defaultBtn.style.display = "inline-block";
+            }
+        });
+        }
+
+    function playerDeathEvent() {
+        $.ajax({
+            url: "../../Game/PlayerDeathEvent",
+            type: "POST",
+            data: {  },
+            cache: false,
+            async: true,
+            success: function (data) {
+                 var element = document.getElementById("text-UI")
+                element.innerHTML = element.innerHTML.concat(data)
+
+                //Change the ui back to travel form
+                var monsterUI = document.getElementById("MonsterUI");
+                monsterUI.style.display = "none";
+
+                var combatBtn = document.getElementById("ComabatBtn");
+                combatBtn.style.display = "none";
+
+                var defaultBtn = document.getElementById("defaultBtn");
+                defaultBtn.style.display = "none";
+
+                var lostBtn = document.getElementById("Lost");
+                lostBtn.style.display = "inline-block";
+            }
+        });
+        }
+
+    //#############################/*Actions*/#################################
+    function buy(item, price) {
+         $.ajax({
+            url: "../../Game/BuyEvent",
+            type: "POST",
+            data: { itemID: item, itemPrice: price },
+            cache: false,
+            async: true,
+            success: function (data) {
+            
+                var elem = document.getElementById("text-UI");
+                elem.innerHTML = elem.innerHTML.concat(data);
+            }
+        });
+    }
+
+    function SellItem(item, price) {
+        $.ajax({
+            url: "../../Game/SellEvent",
+            type: "POST",
+            data: { itemID: item, itemPrice: price },
+            cache: false,
+            async: true,
+            success: function (data) {
+            
+                var elem = document.getElementById("text-UI");
+                elem.innerHTML = elem.innerHTML.concat(data);
+
+                closeSellBag();
+            }
+        });
+    }
+
+    function openSellBag() {
+        var bag = document.getElementById("Bag-List");
+        var sellBtn = document.getElementById("Sell");
+        var buyBtn = document.getElementById("Buy");
+        $.ajax({
+            url: "../../Game/SellInventory",
+            type: "Post",
+            data: {},
+            cache: false,
+            async: true, 
+            success: function (data) {
+                bag.innerHTML = data;
+                bag.style.display = "inline-block";
+                sellBtn.style.display = "none";
+                buyBtn.style.display = "inline-block";
+            }
+        });
+       
+    }
+
+    function closeSellBag() {
+        var bag = document.getElementById("Bag-List");
+        var sellBtn = document.getElementById("Sell");
+        var buyBtn = document.getElementById("Buy");
+
+        bag.style.display = "none";
+        sellBtn.style.display = "inline-block";
+        buyBtn.style.display = "none";
+    }
+
+    function OpenBag() {
+        var elem = document.getElementById("Bag-List");
+        if (elem.style.display === "none") {
+            elem.style.display = "inline-block";
+        } else {
+            elem.style.display = "none";
+        }
+    }
+
+    function LeaveMerchant() {
+        var merchantBtn = document.getElementById("MerchantBtns");
+        var defautlBtn = document.getElementById("defaultBtn");
+        var merchant = document.getElementById("merchant");
+        var bag = document.getElementById("Bag-List");
+
+        defautlBtn.style.display = "inline-block"; 
+        merchantBtn.style.display = "none";
+        merchant.style.display = "none";
+        bag.style.display = "none";
+    }
+
+    //For using Potions or buff items.
+    function UseItem(item, itemType) {
+        var bar;
+        var value;
+        var bag = document.getElementById("Bag-List");
+        if (itemType === 0) {
+            bar = document.getElementById("Health");
+            value = bar.value;
+        } else if (itemType === 1) {
+            bar = document.getElementById("Stamina");
+            value = bar.value;
+        } else if (itemType === 2) {
+            bar = document.getElementById("Magica");
+            value = bar.value;
+        } 
+
+        $.getJSON("../../User/UseItem", { inventoryID: item, itemType: itemType, bar: value }, function (response) {
+            var element;
+            if (response.bar === 0) {
+                element = "Health";
+            } else if (response.bar === 1) {
+                element = "Stamina";
+            } else {
+                element = "Magica";
+            }
+            increaseAlterBar(response.value, element);
+        });
+        bag.style.display = "none";
+    }
+
+    //For using weapons and armors
+    function UseNonCosumable(item, itemType) {
+        $.ajax({
+            url: "../../Game/UseNonConsumable",
+            type: "POST",
+            data: { itemType: itemType, inventoryID: item },
+            cache: false,
+            async: true,
+            success: function (data) {
+
+                var bag = document.getElementById("Bag-List");
+                bag.style.display = "none";
+
+                var element = document.getElementById("text-UI")
+                element.innerHTML = element.innerHTML.concat(data)
+            }
+        });
+    }
+
+    //called whenever the user wants to travel.
+    function Travel(regionID, eventID)
+    {
+        var bag = document.getElementById("Bag-List");
+        bag.style.display = "none";
+            $.ajax({
+                url: "../../Game/DoAction",
+                type: "POST",
+                data: { action: eventID, regionID: regionID },
+                cache: false,
+                async: true,
+                success: function (data) {
+                    if (data === '1' || data === "2" || data === "-1") {
+                        eventAction(regionID, data);
+                        monsterEvent();
+                    } else if (data === "3" ) {
+                        MerchantEvent();
+                    }
+                    else {
+                        var element = document.getElementById("text-UI")
+                        element.innerHTML = element.innerHTML.concat(data)
+                    }
+                }
+            })
+    };
+
+</script>
+

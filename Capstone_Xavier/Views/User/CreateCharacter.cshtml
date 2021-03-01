@@ -1,0 +1,49 @@
+﻿@using Capstone_Xavier.Models
+
+@model CharacterModel
+
+@{
+    ViewBag.Title = "CreateCharacter";
+}
+
+<h3>CreateCharacter</h3>
+
+@using (Ajax.BeginForm("GetClasses", "User", null,
+    new AjaxOptions { UpdateTargetId = "Classes", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
+{
+    <div style="height: 100px; width: 250px; position: absolute; top: 15vw;">
+        <button type="submit" class="btn-user" style="top: -15px; position: relative">Get Class Info</button>
+        <label style="display: inline-block;position: absolute; right: -5vw; top: -3vw">Choose a class and click the button to see their stats.</label>
+        @Html.DropDownListFor(Ajax => Ajax.classID, new SelectList(Model.classes, "classID", "className"), new { @id = "classID", @class = "form-control", @type="submit", @role="button" })
+    </div>
+
+    <div id="Classes" class="info-box-alt">
+
+    </div>
+}
+
+@using (Html.BeginForm("CreateNewCharacter", "User"))
+{
+    <div class="nav-side">
+        <div class="input-list">
+            <div class="input">
+                <label>Character Name</label>
+                <span class="icon-input"></span>
+                @Html.EditorFor(CharacterModel => CharacterModel.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter First Name" } })
+
+            </div>
+
+            <br>
+            <div class="input">
+                <label>Class</label>
+                <span class="icon-input"></span>
+
+                @Html.DropDownListFor(Model => Model.classID, new SelectList(Model.classes, "classID", "className"), new { @id = "classID", @class = "form-control" })
+
+            </div>
+        </div>
+
+        <button class="btn-user" type="submit">Submit</button>
+    </div>
+
+}
