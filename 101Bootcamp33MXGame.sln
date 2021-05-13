@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone_DAL", "Capstone_DA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone_UnitTest", "Capstone_UnitTest\Capstone_UnitTest.csproj", "{B418657D-70BD-4900-8E87-A3145A20B90B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extra", "extra", "{DDBDF2B5-F971-4466-BDFA-95AE9DC342DF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extras", "extras", "{DDBDF2B5-F971-4466-BDFA-95AE9DC342DF}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		xGame.sql = xGame.sql
