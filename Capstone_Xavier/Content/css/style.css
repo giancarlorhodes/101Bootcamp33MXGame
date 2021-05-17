@@ -99,10 +99,17 @@
 }
 
 .input {
-    position: relative;
+
+    /*position: relative;
     display: inline-block;
     width: 25vw;
-    margin: 1vw;
+    margin: 1vw;*/
+
+    width: 640px; /* Can be in percentage also. */
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
 }
 
 .input-list {
@@ -222,6 +229,7 @@ button {
     background-color: #af4a0f;
     display: inline;
     padding: .25em;
+    margin: 10px;
     border: none;
     color: black;
     font-size: 1.5em;
