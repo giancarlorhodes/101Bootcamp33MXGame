@@ -40,16 +40,16 @@
             <label>Username</label>
             <span class="icon-input"></span>
             @Html.EditorFor(LoginModel => LoginModel.username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter First Name" } })
-
         </div>
         <br>
         <div class="input">
             <label>Password</label>
             <span class="icon-input"></span>
             @Html.EditorFor(LoginModel => LoginModel.password, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Enter Password." } })
-        </div>
+            <button class="btn-user" type="submit">Submit</button>
+            <button class="btn-user" type="reset">Clear</button>
+        </div>  
     </div>
-    <button class="btn-user" type="submit">Submit</button>
-    <button class="btn-user" type="reset">Clear</button>
+   
 
 }
