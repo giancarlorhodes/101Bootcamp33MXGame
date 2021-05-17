@@ -20,15 +20,16 @@
         <div class="nav-side">
             <!--<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>-->
 
-            <button class="btn">@Html.ActionLink("Register","Register", "Home")</button>
+            <button class="btn">@Html.ActionLink("Register", "Register", "Home")</button>
             <button class="btn">@Html.ActionLink("Login", "Login", "Home")</button>
-            <br>
-
+            <button class="btn" style="background-color:forestgreen">@Html.ActionLink("FAQS", "FAQS", "Home")</button>
+           
             <!--Dropdown menu-->
-            <div class="dropdown">
-                <button onclick="dropDown()" class="dropBtn">More</button>
-                <div id="myDropdown" class="dropdown-item">
-                    <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
-                </div>
+            <!--<div class="dropdown">
+            <button onclick="dropDown()" class="dropBtn">More</button>
+            <div id="myDropdown" class="dropdown-item">
+                <a href="#">@Html.ActionLink("FAQS", "FAQS", "Home")</a>
             </div>
+            </div>-->
+            
         </div>
