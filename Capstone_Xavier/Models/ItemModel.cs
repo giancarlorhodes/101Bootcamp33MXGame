@@ -12,6 +12,8 @@ namespace Capstone_Xavier.Models
     /// </summary>
     public class ItemModel
     {
+        internal int isEquiped;
+
         public int itemID { get; set; }
         public string itemName { get; set; }
         public int itemType { get; set; }
