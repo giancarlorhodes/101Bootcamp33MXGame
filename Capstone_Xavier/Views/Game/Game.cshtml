@@ -68,7 +68,8 @@
 
 <!--For combat events only. Shows during monster events-->
 <div id="ComabatBtn" class="btn-block" style="display: none;">
-    <button class="btn-user" id="Travel" onclick="combatAction(0)">Attack</button>
+    @*<span id="coolDown"></span>*@
+    <button class="btn-user" id="Travel" onclick="attack()">Attack</button>
     <button class="btn-user" onclick="combatAction(1)">Defend</button>
     <button class="btn-user" onclick="combatAction(2)">Flee</button>
     <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">Exit</button>
@@ -136,9 +137,8 @@
     //For decreasing specific bar values based on amount and bar
     function alterBar(increment, element) {
         var h = document.getElementById(element);
-        var min = h.value - increment;
-        var i;
-        var id = setInterval(animateBar, 80);
+        var min = h.value - increment;        
+        var id = setInterval(animateBar, 60);
         function animateBar() {
             if (h.value === min || h.value === 0) {
                 clearInterval(id);
@@ -269,7 +269,7 @@
                 var playerStamina = document.getElementById("Stamina");
                 var playerMagica = document.getElementById("Magica");
 
-
+                //here
                 var playerHealth = playerHBar.value;
                 var increment = playerHealth - response.playerH;
                 if (response.Stamina != null) {
@@ -287,23 +287,22 @@
                 var monsterHBar = document.getElementById("MHealth");
                 var monsterIncrement = monsterHBar.value - response.monsterH;
 
-                if (increment < 0) {
+                if (increment <= 0) {
                     increment = (increment - increment) - increment;
                 }
 
-                if (monsterIncrement < 0) {
+                if (monsterIncrement <= 0) {
                     monsterIncrement = (monsterIncrement - monsterIncrement) - monsterIncrement;
                 }
 
                 alterBar(monsterIncrement, monsterHBar.id);
 
-                if (monsterIncrement > monsterHBar.value) {
+                if (monsterIncrement >= monsterHBar.value) {
 
                     monsterDeathEvent(playerHealth - increment);
                 }
-                if (increment > playerHBar.value) {
+                if (increment >= playerHBar.value) {
                     playerDeathEvent();
-
                 }
             }
         })
@@ -505,14 +504,18 @@
                 data: { action: eventID, regionID: regionID },
                 cache: false,
                 async: true,
-                success: function (data) {
-                    if (data === '1' || data === "2" || data === "-1") {
+                success: function (data)
+                {
+                    if (data === '1' || data === "2" || data === "-1")
+                    {
                         eventAction(regionID, data);
                         monsterEvent();
-                    } else if (data === "3" ) {
+                    } else if (data === "3")
+                    {
                         MerchantEvent();
                     }
-                    else {
+                    else
+                    {
                         var element = document.getElementById("text-UI")
                         element.innerHTML = element.innerHTML.concat(data)
                     }
@@ -520,5 +523,29 @@
             })
     };
 
+    var locked = false;
+   
+    function attack() {
+
+        if (!locked) {
+            document.getElementById("Travel").disabled = true;
+            //var seconds = 5;
+            //var countdown = setInterval(function () {
+            //    seconds--;
+            //    document.getElementById("coolDown").innerHTML = seconds;
+            //    if (seconds <= 0) clearInterval(countdown);
+            //}, 500);
+            combatAction(0); 
+            locked = true;
+            
+            setTimeout(unlock, 1500);
+        }
+
+    }
+
+    function unlock() {
+        locked = false;
+        document.getElementById("Travel").disabled = false;
+    }
 </script>
 
