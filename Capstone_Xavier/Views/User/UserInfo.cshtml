@@ -8,10 +8,10 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="nav-side" style="margin: 2vw;">
+<div class="nav-side">
     <div class="dropdown">
         <button onclick="dropDown()" class="dropBtn">More</button>
-        <div id="myDropdown" class="dropdown-item"
+        <div id="myDropdown" class="dropdown-item">
             <a onclick="location.href='@Url.Action("Users", "Home")'">Home</a>
             @{
                 string role = Session["Role"].ToString();
@@ -39,7 +39,7 @@
 
 @using (Html.BeginForm("UserInfo", "User", Model))
 {
-    <div class="nav-side" style="bottom: 2vw;">
+    <div class="text-center" style="bottom: 2vw;">
         <div class="input-list">
             <div class="input">
                 <label>Username</label>

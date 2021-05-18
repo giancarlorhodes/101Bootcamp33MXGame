@@ -314,6 +314,21 @@ namespace Capstone_Xavier.Controllers
         [HttpGet]
         public ActionResult GetMonsterValues() {
             GameModel game = (GameModel)Session["Game"];
+
+            if (game.monster == null)
+            {
+
+                GameModel G = Session["Game"] as GameModel;
+
+                CharacterModel charloc = G.character;
+
+                MonsterEvent(charloc.location, charloc.location);
+
+                game = (GameModel)Session["Game"];
+
+            }
+
+
             MonsterModel monster = game.monster;
             var _monster = new {monstername = monster.monsterName, monsterHealth = monster.health.ToString() };
 
