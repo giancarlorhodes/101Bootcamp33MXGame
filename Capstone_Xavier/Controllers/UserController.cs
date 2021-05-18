@@ -227,17 +227,17 @@ namespace Capstone_Xavier.Controllers
                 string temp = "";
                 if (item.itemType == (int)ItemTypes.Armor || item.itemType == (int)ItemTypes.Weapons)//If the item is armor or a weapon
                 {
-                    if (item.isEquipted == 1)//If the item is equipted. 0: Not , 1: Equipted
+                    if (item.isEquiped == 1)//If the item is equiped. 0: Not , 1: Equiped
                     {
                         temp = "<br><div class='shop-item' style='height: 5vw'> <h6>" + item.itemName + "</h6> <div class='item-stats'> Gold: " + item.goldPrice.ToString() + stats
                    + "</div><button class='btn-user'style='display: inline-block; float: left;' onclick='UseNonCosumable(" + item.inventoryID + ","
-                   + item.itemType.ToString() + ")'>Unequipt</button></div><br>";
+                   + item.itemType.ToString() + ")'>Unequip</button></div><br>";
                     }
                     else
                     {
                         temp = "<br><div class='shop-item' style='height: 5vw'> <h6>" + item.itemName + "</h6> <div class='item-stats'> Gold: " + item.goldPrice.ToString() + stats
                    + "</div><button class='btn-user'style='display: inline-block; float: left;' onclick='UseNonCosumable(" + item.inventoryID + ","
-                   + item.itemType.ToString() + ")'>Equipt</button></div><br>";
+                   + item.itemType.ToString() + ")'>Equip</button></div><br>";
                     }
                 }
                 else {
