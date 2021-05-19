@@ -51,7 +51,6 @@ namespace Capstone_Xavier.Controllers
             int health = playerHealth;
             int mHealth = monsterHealth;
             int monsterSpeed = (monster.danger + monster.armor) / 2;
-
             int magicaMod = 0;
             int staminaMod = 0;
             int _stamina = stamina + staminaMod;
