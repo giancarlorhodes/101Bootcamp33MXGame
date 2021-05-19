@@ -100,8 +100,10 @@ namespace Capstone_Xavier.Controllers
             UsersBO user = mapper.UILogin_To_BO(login);
             DBUse data = new DBUse();
             user = data.FindUser(user);
+
             if (ModelState.IsValid)
             {
+                // Doesn't have validation for null or empty strings
                 if (user.Username == null )
                 {
                     login.alertType = 2;
@@ -141,7 +143,6 @@ namespace Capstone_Xavier.Controllers
 
             List<CharacterModel> characters = mapper.CharacterModel_To_List(data.GetCharacters(userID));
              
-
             return View(characters);
         }
 

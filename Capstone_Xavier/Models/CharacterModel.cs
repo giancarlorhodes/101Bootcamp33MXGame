@@ -13,6 +13,7 @@ namespace Capstone_Xavier.Models
         public int id { get; set; }
         public int userID { get; set; }
 
+        [Required(ErrorMessage ="Invaild Name")]
         [MaxLength(15, ErrorMessage = "Name cannot be above 15 characters")]
         public string name { get; set; }
         public int classID { get; set; }

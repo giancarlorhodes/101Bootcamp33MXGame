@@ -11,6 +11,7 @@
 @using (Ajax.BeginForm("GetClasses", "User", null,
     new AjaxOptions { UpdateTargetId = "Classes", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
 {
+    
     <div style="height: 100px; width: 250px; position: absolute; top: 15vw;">
         <button type="submit" class="btn-user" style="top: -15px; position: relative">Get Class Info</button>
         <label style="display: inline-block;position: absolute; right: -5vw; top: -3vw">Choose a class and click the button to see their stats.</label>
@@ -22,7 +23,7 @@
     </div>
 }
 
-@using (Html.BeginForm("CreateNewCharacter", "User"))
+@using (Html.BeginForm("CreateCharacter", "User"))
 {
     <div class="nav-side">
         <div class="input-list">
@@ -30,7 +31,7 @@
                 <label>Character Name</label>
                 <span class="icon-input"></span>
                 @Html.EditorFor(CharacterModel => CharacterModel.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter First Name" } })
-
+                @Html.ValidationMessageFor(CharacterModel => CharacterModel.name)
             </div>
 
             <br>
