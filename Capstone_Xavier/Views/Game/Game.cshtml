@@ -45,6 +45,7 @@
     <div class="container-bar" style="width: 60%;  float: right; vertical-align: middle;">
         <progress id="MHealth" class="Health" value="0" max="200"></progress>
     </div>
+    <div class="MonsterHealth"><p>HP:<var id="monsterhealth"></var></p></div>
 </div>
 
 
@@ -111,7 +112,8 @@
             } else {
                 x.style.display = "none";
             }
-
+            var scroll = document.getElementById('text-UI');
+            scroll.scrollTop = scroll.scrollHeight;
         });
     });
 
@@ -214,8 +216,10 @@
             cache: false,
             async: true,
             success: function (data) {
-                 var element = document.getElementById("text-UI")
-                        element.innerHTML = element.innerHTML.concat(data)
+                var element = document.getElementById("text-UI")
+                element.innerHTML = element.innerHTML.concat(data)
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
             }
         });
         };
@@ -242,6 +246,7 @@
             mHealth.max = response.monsterHealth;
             mHealth.value = response.monsterHealth;
 
+            document.getElementById("monsterhealth").innerHTML = mHealth.value;
         })
     };
 
@@ -267,8 +272,9 @@
                 defaultBtn.style.display = "none";
 
                 var elem = document.getElementById("text-UI");
-                elem.innerHTML = elem.innerHTML.concat("<br><div style=' width: 10 %; height: auto; display: block; float: left; margin: 3px; padding: 3px; '>After searching the area for a while you come across an old man carrying a large sack on his back. He looks to you with a crookedd smile."+
-                            "Care to browse my wares? Opening the sack you see a few items. Will you buy? Your purse: <strong>"+gold+" gold</strong></div><br>");
+                elem.innerHTML = elem.innerHTML.concat("<br><div style=' width: 10 %; height: auto; display: block; float: left; margin: 3px; padding: 3px; '>After searching the area for a while you come across an old man carrying a large sack on his back. He looks to you with a crookedd smile."+"Care to browse my wares? Opening the sack you see a few items. Will you buy? Your purse: <strong>" + gold + " gold</strong></div><br>");
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
             }
         });
     }
@@ -279,7 +285,7 @@
         var health = document.getElementById("Health").value;
         var magica = document.getElementById("Magica").value;
         var stamina = document.getElementById("Stamina").value;
-
+        document.getElementById("monsterhealth").innerHTML = mHealth;
         //For altering the bars and calling possible death events
         $.getJSON("../../Combat/CombatAction", { monsterHealth: mHealth, playerHealth: health, magica: magica, stamina: stamina, actionID: actionID }, function (response) {
 
@@ -288,6 +294,8 @@
                 var story = document.getElementById("text-UI");
                 story.innerHTML = story.innerHTML.concat(response.print);
 
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
                 //Change the ui back to travel form
                 var monsterUI = document.getElementById("MonsterUI");
                 monsterUI.style.display = "none";
@@ -302,6 +310,8 @@
                 //TODO-make seperate method
                 var story = document.getElementById("text-UI");
                 story.innerHTML = story.innerHTML.concat(response.print);
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
 
                 //used for altering the player bar
                 var playerHBar = document.getElementById("Health");
@@ -335,6 +345,7 @@
                 }
 
                 alterBar(monsterIncrement, monsterHBar.id);
+                document.getElementById("monsterhealth").innerHTML = mHealth;
 
                 if (monsterIncrement >= monsterHBar.value) {
 
@@ -345,7 +356,7 @@
                 }
             }
         })
-        
+
     };
 
     function monsterDeathEvent(playerH) {
@@ -360,6 +371,8 @@
                  var element = document.getElementById("text-UI")
                 element.innerHTML = element.innerHTML.concat(data)
 
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
                 //Change the ui back to travel form
                 var monsterUI = document.getElementById("MonsterUI");
                 monsterUI.style.display = "none";
@@ -383,6 +396,8 @@
             success: function (data) {
                  var element = document.getElementById("text-UI")
                 element.innerHTML = element.innerHTML.concat(data)
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
 
                 //Change the ui back to travel form
                 var monsterUI = document.getElementById("MonsterUI");
@@ -412,6 +427,8 @@
 
                 var elem = document.getElementById("text-UI");
                 elem.innerHTML = elem.innerHTML.concat(data);
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
             }
         });
     }
@@ -427,6 +444,8 @@
 
                 var elem = document.getElementById("text-UI");
                 elem.innerHTML = elem.innerHTML.concat(data);
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
 
                 closeSellBag();
             }
@@ -530,6 +549,8 @@
 
                 var element = document.getElementById("text-UI")
                 element.innerHTML = element.innerHTML.concat(data)
+                var scroll = document.getElementById('text-UI');
+                scroll.scrollTop = scroll.scrollHeight;
             }
         });
     }
@@ -559,6 +580,8 @@
                     {
                         var element = document.getElementById("text-UI")
                         element.innerHTML = element.innerHTML.concat(data)
+                        var scroll = document.getElementById('text-UI');
+                        scroll.scrollTop = scroll.scrollHeight;
                     }
                 }
             })

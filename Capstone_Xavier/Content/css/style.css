@@ -194,6 +194,17 @@
     color: white;
 }
 
+   #MonsterUI .MonsterHealth {
+    position: absolute;
+    height: 33%;
+    width: 30%;
+    left: 29%;
+    top: -82%;
+    margin: 5%;
+    padding: 1px;
+    color: white;
+}
+
 
 
 /*--------------------Standard Labels----------------------------*/
@@ -554,7 +565,7 @@ button {
     height: 400px;
     width: 55%;
     background-color: palegoldenrod;
-    overflow-y: scroll;
+    overflow-y: scroll ;
 }
 
 .info-UI {
