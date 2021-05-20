@@ -159,7 +159,7 @@
     function alterBar(increment, element) {
         var h = document.getElementById(element);
         var min = h.value - increment;
-        var id = setInterval(animateBar, 60);
+        var id = setInterval(animateBar, 40);
         function animateBar() {
 
             if (h.value === min || h.value === 0) {
@@ -186,17 +186,14 @@
     function increaseAlterBar(increment, element) {
         var h = document.getElementById(element);
         var min = h.value + increment;
-        var i;
         var id = setInterval(animateBar, 90);
         function animateBar() {
             if (h.value === min || h.value === h.max) {
                 clearInterval(id);
                 document.getElementById("hptext").innerHTML = h.value;
-
             } else {
                 h.value++;
                 document.getElementById("hptext").innerHTML = h.value;
-
             }
             document.getElementById("hptext").innerHTML = h.value;
             document.getElementById("staminatext").innerHTML = s.value;
@@ -348,7 +345,7 @@
                 }
             }
         })
-        document.getElementById("hptext").innerHTML = h.value;
+        
     };
 
     function monsterDeathEvent(playerH) {
@@ -572,7 +569,7 @@
     function attack() {
 
         if (!locked) {
-            document.getElementById("Travel").disabled = true;
+            //document.getElementById("Travel").disabled = true;
             //var seconds = 5;
             //var countdown = setInterval(function () {
             //    seconds--;
@@ -581,15 +578,15 @@
             //}, 500);
             combatAction(0);
             locked = true;
-
-            setTimeout(unlock, 1500);
+            setTimeout(unlock, 3000);
+            
         }
-
     }
 
     function unlock() {
         locked = false;
-        document.getElementById("Travel").disabled = false;
+        //document.getElementById("Travel").disabled = false;
+        
     }
 </script>
 
