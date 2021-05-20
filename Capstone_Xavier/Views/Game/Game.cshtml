@@ -4,8 +4,6 @@
 <!--The game view. Where text responses are put-->
 <div class="text-UI" id="text-UI">
 
-
-
 </div>
 
 @using (Ajax.BeginForm("GetCharacterInventory", "User", Model.character,
@@ -48,7 +46,6 @@
         <progress id="MHealth" class="Health" value="0" max="200"></progress>
     </div>
     <div class="MonsterHealth"><p>HP:<var id="monsterhealth"></var></p></div>
-
 </div>
 
 
@@ -119,11 +116,6 @@
             scroll.scrollTop = scroll.scrollHeight;
         });
     });
-
-   
-    
-
-
 
     //called on load. used to load character data.
     document.addEventListener("DOMContentLoaded", function () {
@@ -232,8 +224,6 @@
                 var scroll = document.getElementById('text-UI');
                 scroll.scrollTop = scroll.scrollHeight;
             }
-            
-
         });
         };
 
@@ -260,7 +250,6 @@
             mHealth.value = response.monsterHealth;
 
             document.getElementById("monsterhealth").innerHTML = mHealth.value;
-
         })
     };
 
@@ -310,7 +299,6 @@
 
                 var scroll = document.getElementById('text-UI');
                 scroll.scrollTop = scroll.scrollHeight;
-
                 //Change the ui back to travel form
                 var monsterUI = document.getElementById("MonsterUI");
                 monsterUI.style.display = "none";
@@ -357,11 +345,10 @@
 
                 if (monsterIncrement <= 0) {
                     monsterIncrement = (monsterIncrement - monsterIncrement) - monsterIncrement;
-                    
                 }
 
                 alterBar(monsterIncrement, monsterHBar.id);
-                document.getElementById("monsterhealth").innerHTML = document.getElementById("MHealth");
+                document.getElementById("monsterhealth").innerHTML = mHealth;
 
                 if (monsterIncrement >= monsterHBar.value) {
 
@@ -373,7 +360,7 @@
             }
         })
         document.getElementById("hptext").innerHTML = h.value;
-        document.getElementById("monsterhealth").innerHTML = document.getElementById("MHealth");
+        document.getElementById("monsterhealth").innerHTML = mHealth;
     };
 
     function monsterDeathEvent(playerH) {
@@ -390,7 +377,6 @@
 
                 var scroll = document.getElementById('text-UI');
                 scroll.scrollTop = scroll.scrollHeight;
-
                 //Change the ui back to travel form
                 var monsterUI = document.getElementById("MonsterUI");
                 monsterUI.style.display = "none";
@@ -567,7 +553,6 @@
 
                 var element = document.getElementById("text-UI")
                 element.innerHTML = element.innerHTML.concat(data)
-
                 var scroll = document.getElementById('text-UI');
                 scroll.scrollTop = scroll.scrollHeight;
             }
@@ -599,7 +584,6 @@
                     {
                         var element = document.getElementById("text-UI")
                         element.innerHTML = element.innerHTML.concat(data)
-
                         var scroll = document.getElementById('text-UI');
                         scroll.scrollTop = scroll.scrollHeight;
                     }
