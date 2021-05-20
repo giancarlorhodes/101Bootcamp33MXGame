@@ -160,6 +160,42 @@
     border: 3px solid saddlebrown;
 }
 
+
+
+.hpStatusText {
+    position: absolute;
+    height: 10px;
+    width: 30%;
+    left: 34%;
+    top: -35%;
+    margin: 0%;
+    color: white;
+}
+
+.staminaStatusText {
+    position: absolute;
+    height: 81%;
+    width: 30%;
+    left: 28%;
+    top: -44%;
+    margin: 5%;
+    padding: 1px;
+    color: white;
+}
+
+.magicaStatusText {
+    position: absolute;
+    height: 30%;
+    width: 30%;
+    left: 56%;
+    top: -44%;
+    margin: 5%;
+    padding: 1px;
+    color: white;
+}
+
+
+
 /*--------------------Standard Labels----------------------------*/
 p {
     position: center;

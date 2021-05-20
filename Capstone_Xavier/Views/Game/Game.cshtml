@@ -10,6 +10,7 @@
     new AjaxOptions { UpdateTargetId = "Bag-List", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
 {
     <!--The character UI and stats-->
+<<<<<<< HEAD
     <div class="info-UI">
         <div style="width: 38%; height: 100%;  display:inline-block">
             <h6 style=" display: block; width: 100%; float: left; font-size: x-large; text-align: center">@Model.character.name</h6>
@@ -21,7 +22,28 @@
             <progress id="Stamina" value="20" max="60"></progress>
             <progress id="Magica" value="10" max="60"><text>Magica</text></progress>
         </div>
+=======
+<div class="info-UI">
+    <div style="width: 38%; height: 100%;  display:inline-block">
+        <h6 style=" display: block; width: 100%; float: left; font-size: x-large; text-align: center">@Model.character.name</h6>
+        <button class="btn-user" style="width: 50%; margin-left: 1vw;" type="submit" onclick="OpenBag()">Bag</button>
     </div>
+    <div class="container-bar" style="width: 60%;  float: right; vertical-align: middle;">
+
+        <progress id="Health" class="Health" value="0" max="200"></progress>
+        <progress id="Stamina" value="20" max="60"></progress>
+        <progress id="Magica" value="10" max="60"></progress>
+>>>>>>> 85eb7a5a7b90e7fb8204dcb42aef345f0be55219
+    </div>
+
+    <div class="hpStatusText"><p>HP: <var id="hptext"></var></p></div>
+
+    <div class="staminaStatusText"><p>Stamina: <var id="staminatext"></var></p> </div>
+
+    <div class="magicaStatusText"><p>Magica: <var id="magicatext"></var></p></div>
+
+
+</div>
     <!--The character bag items. Refreshed every time the bag button is clicked.-->
 
     <div id="Bag-List" class="list-bag" style="bottom: 0;height: 20vw; position: absolute; top:28vw; display: none;">
@@ -38,6 +60,9 @@
         <progress id="MHealth" class="Health" value="0" max="200"></progress>
     </div>
 </div>
+
+
+
 
 <!--Opened and used for a list of available regions to travel to.-->
 <div class="list-bag" id="list-regions" style="display: none">
@@ -122,15 +147,25 @@
         h.max = ob.maxhp;
         h.value = ob.hp;
 
+        document.getElementById("hptext").innerHTML = h.value;
+
+     
+
+
+
         //used for setting the stamina bar
         var s = document.getElementById("Stamina");
         s.value = ob.Stamina;
         s.max = ob.Stamina;
 
+        document.getElementById("staminatext").innerHTML = s.value;
+
         //used for setting the magica bar
         var m = document.getElementById("Magica");
         m.max = ob.Magica;
         m.value = ob.Magica;
+        
+        document.getElementById("magicatext").innerHTML = m.value;
     });
     //########################/*Misc and UI*/#######################################
 
@@ -140,10 +175,23 @@
         var min = h.value - increment;        
         var id = setInterval(animateBar, 40);
         function animateBar() {
+
             if (h.value === min || h.value === 0) {
                 clearInterval(id);
+                if (element == "Health") {
+                    document.getElementById("hptext").innerHTML = h.value;
+                }
+                
             } else {
                 h.value--;
+                if (element == "Health") {
+                    document.getElementById("hptext").innerHTML = h.value;
+                }
+
+    
+            }
+            if (element == "Health") {
+                document.getElementById("hptext").innerHTML = h.value;
             }
         };
     };
@@ -157,9 +205,17 @@
         function animateBar() {
             if (h.value === min || h.value === h.max) {
                 clearInterval(id);
+                document.getElementById("hptext").innerHTML = h.value;
+           
             } else {
                 h.value++;
+                document.getElementById("hptext").innerHTML = h.value;
+           
             }
+            document.getElementById("hptext").innerHTML = h.value;
+            document.getElementById("staminatext").innerHTML = s.value;
+            document.getElementById("magicatext").innerHTML = m.value;
+
         };
     };
 
@@ -309,7 +365,11 @@
                 }
             }
         })
+<<<<<<< HEAD
         scrollToBottom();
+=======
+        document.getElementById("hptext").innerHTML = h.value;
+>>>>>>> 85eb7a5a7b90e7fb8204dcb42aef345f0be55219
     };
 
     function monsterDeathEvent(playerH) {
@@ -481,6 +541,7 @@
                 element = "Magica";
             }
             increaseAlterBar(response.value, element);
+            document.getElementById("hptext").innerHTML = h.value;
         });
         bag.style.display = "none";
         scrollToBottom();
