@@ -13,7 +13,7 @@
     <div class="info-UI">
         <div style="width: 38%; height: 100%;  display:inline-block">
             <h6 style=" display: block; width: 100%; float: left; font-size: x-large; text-align: center">@Model.character.name</h6>
-            <button class="btn-user" style="width: 50%; margin-left: 1vw;" type="submit" onclick="OpenBag()">Bag</button>
+            <button class="btn-user" style="width: 50%; margin-left: 1vw;" type="submit" onclick="OpenBag(); scrollToBottom();">Bag</button>
         </div>
         <div class="container-bar" style="width: 60%;  float: right; vertical-align: middle;">
 
@@ -45,7 +45,7 @@
     @{
         foreach (RegionModel region in Model.regions)
         {
-            <div class="c-info" id="region" value="@region.regionID" style="cursor: pointer;" role="button" onclick="Travel(@region.regionID, 1)">@region.regionName</div>
+            <div class="c-info" id="region" value="@region.regionID" style="cursor: pointer;" role="button" onclick="Travel(@region.regionID, 1); scrollToBottom();">@region.regionName</div>
         }
     }
 
@@ -55,29 +55,29 @@
 <div id="defaultBtn" class="btn-block">
     <button class="btn-user" id="Travel">Travel</button>
     <button class="btn-user" id="Look" onclick="Travel(0,2)">Look Around</button>
-    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">Exit</button>
+    <button class="btn-user" onclick="location.href = '@Url.Action("Users", "Home")'; scrollToBottom();">Exit</button>
 </div>
 
 <!--Merchant Buttons. Called on merchant events-->
 <div id="MerchantBtns" class="btn-block" style="display: none;">
-    <button class="btn-user" id="Buy" style="display: none;" onclick="closeSellBag()">Buy</button>
-    <button class="btn-user" id="Sell" onclick="openSellBag()" >Sell</button>
-    <button class="btn-user" id="btn-merchant"  onclick="LeaveMerchant()">Leave Merchant</button>
+    <button class="btn-user" id="Buy" style="display: none;" onclick="closeSellBag(); scrollToBottom();">Buy</button>
+    <button class="btn-user" id="Sell" onclick="openSellBag(); scrollToBottom();" >Sell</button>
+    <button class="btn-user" id="btn-merchant"  onclick="LeaveMerchant(); scrollToBottom();">Leave Merchant</button>
 </div>
   
 
 <!--For combat events only. Shows during monster events-->
 <div id="ComabatBtn" class="btn-block" style="display: none;">
     @*<span id="coolDown"></span>*@
-    <button class="btn-user" id="Travel" onclick="attack()">Attack</button>
-    <button class="btn-user" onclick="combatAction(1)">Defend</button>
-    <button class="btn-user" onclick="combatAction(2)">Flee</button>
-    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">Exit</button>
+    <button class="btn-user" id="Travel" onclick="attack(); scrollToBottom();">Attack</button>
+    <button class="btn-user" onclick="combatAction(1); scrollToBottom();">Defend</button>
+    <button class="btn-user" onclick="combatAction(2); scrollToBottom();">Flee</button>
+    <button class="btn-user" onclick="location.href = '@Url.Action("Users", "Home")'; scrollToBottom();">Exit</button>
 </div>
 
 <!--For player death events. Shows only when the healt is less or = to 0-->
 <div id="Lost" class="btn-block" style="display: none;">
-    <button class="btn-user" onclick="location.href='@Url.Action("Users", "Home")'">I accept my fate</button>
+    <button class="btn-user" onclick="location.href = '@Url.Action("Users", "Home")'; scrollToBottom();">I accept my fate</button>
 </div>
 
 <!--For merchant events only. Refreshed every time the event is triggered-->
@@ -138,7 +138,7 @@
     function alterBar(increment, element) {
         var h = document.getElementById(element);
         var min = h.value - increment;        
-        var id = setInterval(animateBar, 60);
+        var id = setInterval(animateBar, 40);
         function animateBar() {
             if (h.value === min || h.value === 0) {
                 clearInterval(id);
@@ -179,6 +179,7 @@
                         element.innerHTML = element.innerHTML.concat(data)
             }
         });
+         scrollToBottom();
         };
 
     //For calling monsters and starting combat.
@@ -204,6 +205,7 @@
             mHealth.value = response.monsterHealth;
 
         })
+        scrollToBottom();
     };
 
     function MerchantEvent() {
@@ -231,7 +233,8 @@
                 elem.innerHTML = elem.innerHTML.concat("<br><div style=' width: 10 %; height: auto; display: block; float: left; margin: 3px; padding: 3px; '>After searching the area for a while you come across an old man carrying a large sack on his back. He looks to you with a crookedd smile."+
                             "Care to browse my wares? Opening the sack you see a few items. Will you buy? Your purse: <strong>"+gold+" gold</strong></div><br>");
             }
-        });
+         });
+        scrollToBottom();
     }
 
     //###############################/*Combat Actions*/########################
@@ -269,7 +272,7 @@
                 var playerStamina = document.getElementById("Stamina");
                 var playerMagica = document.getElementById("Magica");
 
-                //here
+                
                 var playerHealth = playerHBar.value;
                 var increment = playerHealth - response.playerH;
                 if (response.Stamina != null) {
@@ -306,6 +309,7 @@
                 }
             }
         })
+        scrollToBottom();
     };
 
     function monsterDeathEvent(playerH) {
@@ -331,6 +335,7 @@
                 defaultBtn.style.display = "inline-block";
             }
         });
+        scrollToBottom();
         }
 
     function playerDeathEvent() {
@@ -358,6 +363,7 @@
                 lostBtn.style.display = "inline-block";
             }
         });
+        scrollToBottom();
         }
 
     //#############################/*Actions*/#################################
@@ -373,7 +379,8 @@
                 var elem = document.getElementById("text-UI");
                 elem.innerHTML = elem.innerHTML.concat(data);
             }
-        });
+         });
+        scrollToBottom();
     }
 
     function SellItem(item, price) {
@@ -391,6 +398,7 @@
                 closeSellBag();
             }
         });
+        scrollToBottom();
     }
 
     function openSellBag() {
@@ -410,7 +418,7 @@
                 buyBtn.style.display = "inline-block";
             }
         });
-       
+        scrollToBottom();
     }
 
     function closeSellBag() {
@@ -421,6 +429,7 @@
         bag.style.display = "none";
         sellBtn.style.display = "inline-block";
         buyBtn.style.display = "none";
+        scrollToBottom();
     }
 
     function OpenBag() {
@@ -430,6 +439,7 @@
         } else {
             elem.style.display = "none";
         }
+        scrollToBottom();
     }
 
     function LeaveMerchant() {
@@ -442,6 +452,7 @@
         merchantBtn.style.display = "none";
         merchant.style.display = "none";
         bag.style.display = "none";
+        scrollToBottom();
     }
 
     //For using Potions or buff items.
@@ -472,6 +483,7 @@
             increaseAlterBar(response.value, element);
         });
         bag.style.display = "none";
+        scrollToBottom();
     }
 
     //For using weapons and armors
@@ -491,11 +503,13 @@
                 element.innerHTML = element.innerHTML.concat(data)
             }
         });
+        scrollToBottom();
     }
 
     //called whenever the user wants to travel.
     function Travel(regionID, eventID)
     {
+
         var bag = document.getElementById("Bag-List");
         bag.style.display = "none";
             $.ajax({
@@ -521,31 +535,41 @@
                     }
                 }
             })
+        scrollToBottom();
     };
 
     var locked = false;
    
     function attack() {
-
+        console.log("outside beg: " + locked)
         if (!locked) {
-            document.getElementById("Travel").disabled = true;
+            //document.getElementById("Travel").disabled = true;
             //var seconds = 5;
             //var countdown = setInterval(function () {
             //    seconds--;
             //    document.getElementById("coolDown").innerHTML = seconds;
             //    if (seconds <= 0) clearInterval(countdown);
             //}, 500);
+            console.log("in attack 1st " + locked)
             combatAction(0); 
             locked = true;
-            
-            setTimeout(unlock, 1500);
+            setTimeout(unlock, 2700);
+            console.log("in attack "+ locked)
         }
-
+        console.log("outside end: " + locked)
     }
-
     function unlock() {
         locked = false;
-        document.getElementById("Travel").disabled = false;
+        //document.getElementById("Travel").disabled = false;
+        console.log("unlock " + locked)
     }
+    function scrollToBottom() {
+        var chatHistory = document.getElementById("text-UI");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        //console.log('Scrolling');
+    }
+    
+    
+    
 </script>
 
