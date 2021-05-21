@@ -166,22 +166,87 @@
 
             if (h.value === min || h.value === 0) {
                 clearInterval(id);
-                if (element == "Health") {
-                    document.getElementById("hptext").innerHTML = h.value;
-                }
 
-            } else {
-                h.value--;
-                if (element == "Health") {
-                    document.getElementById("hptext").innerHTML = h.value;
-                }
-
+            if (element == "Health") {
+                document.getElementById("hptext").innerHTML = h.value;
 
             }
+
+            if (element == "Stamina") {
+
+                document.getElementById("staminatext").innerHTML = h.value;
+
+            }
+
+            if (element == "Magica") {
+
+                document.getElementById("magicatext").innerHTML = h.value;
+
+            }
+
+            if (element == "MHealth") {
+
+                document.getElementById("monsterhealth").innerHTML = h.value;
+
+            }
+
+
+        }
+
+                else {
+                        h.value--;
+
+
             if (element == "Health") {
                 document.getElementById("hptext").innerHTML = h.value;
             }
-        };
+
+            if (element == "Stamina") {
+
+                document.getElementById("staminatext").innerHTML = h.value;
+
+            }
+
+            if (element == "Magica") {
+
+                document.getElementById("magicatext").innerHTML = h.value;
+
+            }
+
+            if (element == "MHealth") {
+
+                document.getElementById("monsterhealth").innerHTML = h.value;
+
+            }
+
+
+        }
+
+
+
+        if (element == "Health") {
+            document.getElementById("hptext").innerHTML = h.value;
+        }
+
+        if (element == "Stamina") {
+
+            document.getElementById("staminatext").innerHTML = h.value;
+
+        }
+
+        if (element == "Magica") {
+
+            document.getElementById("magicatext").innerHTML = h.value;
+
+        }
+
+        if (element == "MHealth") {
+
+            document.getElementById("monsterhealth").innerHTML = h.value;
+
+        }
+
+    };
     };
 
     //For increasing specific bar values based on amount and bar
@@ -192,14 +257,62 @@
         function animateBar() {
             if (h.value === min || h.value === h.max) {
                 clearInterval(id);
-                document.getElementById("hptext").innerHTML = h.value;
-            } else {
+
+                if (element == "Health") {
+                    document.getElementById("hptext").innerHTML = h.value;
+                }
+
+                if (element == "Stamina") {
+
+                    document.getElementById("staminatext").innerHTML = h.value;
+
+                }
+
+                if (element == "Magica") {
+
+                    document.getElementById("magicatext").innerHTML = h.value;
+
+                }
+
+            }
+            else {
                 h.value++;
+
+                if (element == "Health") {
+                    document.getElementById("hptext").innerHTML = h.value;
+                }
+
+                if (element == "Stamina") {
+
+                    document.getElementById("staminatext").innerHTML = h.value;
+
+                }
+
+                if (element == "Magica") {
+
+                    document.getElementById("magicatext").innerHTML = h.value;
+
+                }
+
+
+            }
+
+
+            if (element == "Health") {
                 document.getElementById("hptext").innerHTML = h.value;
             }
-            document.getElementById("hptext").innerHTML = h.value;
-            document.getElementById("staminatext").innerHTML = s.value;
-            document.getElementById("magicatext").innerHTML = m.value;
+
+            if (element == "Stamina") {
+
+                document.getElementById("staminatext").innerHTML = h.value;
+
+            }
+
+            if (element == "Magica") {
+
+                document.getElementById("magicatext").innerHTML = h.value;
+
+            }
 
         };
     };
@@ -246,7 +359,7 @@
             mHealth.max = response.monsterHealth;
             mHealth.value = response.monsterHealth;
 
-            document.getElementById("monsterhealth").innerHTML = mHealth.value;
+            document.getElementById("monsterhealth").innerHTML = MHealth.value;
         })
     };
 
