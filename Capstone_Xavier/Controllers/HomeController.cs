@@ -195,7 +195,7 @@ namespace Capstone_Xavier.Controllers
             return _returnBool;
         }
 
-        public ActionResul FAQ() {
+        public ActionResult FAQS() {
             return View();
         }
 
