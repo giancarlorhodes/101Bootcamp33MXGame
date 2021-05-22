@@ -30,5 +30,15 @@
     </p>
 </div>
 <br>
+<<div class="nav-side">
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropBtn">More</button>
+        <div id="myDropdown" class="dropdown-item">
+            <a>@Html.ActionLink("Register", "Register", "Home")</a>
+            <a>@Html.ActionLink("Home", "Index", "Home")</a>
+            <a href="#">@Html.ActionLink("Login", "Login", "Home")</a>
+        </div>
+    </div>
 
 
+</div>
